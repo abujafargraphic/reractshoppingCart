@@ -1,7 +1,16 @@
 import { useState } from 'react';
+import { useEffect } from 'react';
 import './App.css'
 function App() {
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] = useState(() => {
+  const savedCart = JSON.parse(localStorage.getItem("cart"));
+  return savedCart || [];
+});
+
+  useEffect(() => {
+  localStorage.setItem("cart", JSON.stringify(cart));
+}, [cart]);
+
 const products = [
   { id: 1, name: "Laptop", price: 500 },
   { id: 2, name: "Phone", price: 300 },
