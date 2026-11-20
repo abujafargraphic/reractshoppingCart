@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import './App.css'
 function App() {
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
   const [cart, setCart] = useState(() => {
   const savedCart = JSON.parse(localStorage.getItem("cart"));
   return savedCart || [];
@@ -11,7 +13,28 @@ function App() {
   localStorage.setItem("cart", JSON.stringify(cart));
 }, [cart]);
 
-const products = [
+const [products, setProducts] = useState([]);
+
+useEffect(() => {
+  fetch('https://dummyjson.com/products')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error("Failed to fetch products");
+      }
+
+      return response.json();
+    })
+    .then(data => {
+      setProducts(data.products);
+      setIsLoading(false);
+    })
+    .catch(error => {
+      setError(error.message);
+      setIsLoading(false);
+    });
+}, []);
+
+const product = [
   { id: 1, name: "Laptop", price: 500 },
   { id: 2, name: "Phone", price: 300 },
   { id: 3, name: "Tablet", price: 200 }
@@ -61,8 +84,23 @@ function decreaseQuantity(id) {
 }, 0);
   return (
     <div>
+    {
+        <div>
+    { isLoading ? (
+  <p>Loading products...</p>
+) : (
+    products.map(item => (
+      <div key={item.id}>
+        <h3>{item.title}</h3>
+        <p>Price: ${item.price}</p>
+      </div>
+    )))
+  }
+  </div>
+
+    }
      {
-      products.map(item => (
+      product.map(item => (
         <div key={item.id}>
           <span>{item.name}</span>
           <span>{item.price}</span>
