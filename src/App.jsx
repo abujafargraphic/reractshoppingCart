@@ -5,7 +5,7 @@ import Cart from './Cart';
 import Book from './Book';
 import Store from './Store';
 import Items from './Items';
-
+import Form from './Form';
 import Product from './Product';
 import { bookContext } from './BookContext';
 function App() {
@@ -36,10 +36,11 @@ function App() {
   <Cart/>
   <Product/>
 </CartContext.Provider>
-<Book/>
+{/*<Book/>*/}
 <Store/>
 </bookContext.Provider>
 <Items/>
+<Form/>
   </>
   )
 }
